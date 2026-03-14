@@ -14,11 +14,16 @@ const emptyForm: FormData = {
   description: "",
 };
 
+
 function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [formData, setFormData] = useState<FormData>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const user = userService.getCurrentUser();
+  const [activeProject, setActiveProject] = useState<Project | null>(
+  projectService.getActiveProject()
+);
+  
 
   function loadProjects() {
     const data = projectService.getAll();
@@ -101,6 +106,7 @@ function App() {
     <div style={{ maxWidth: "900px", margin: "0 auto", padding: "24px" }}>
       <h1>ProjectMenager</h1>
       <h2>Zalogowany użytkownik: {user.firstName} {user.lastName}</h2>
+      <h2>Aktywny projekt: {activeProject ? activeProject.name : "brak wybranego"}</h2>
 
       <form
         onSubmit={handleSubmit}
@@ -170,6 +176,7 @@ function App() {
                 <div style={{ display: "flex", gap: "8px" }}>
                   <button onClick={() => handleEdit(project)}>Edytuj</button>
                   <button onClick={() => handleDelete(project.id)}>Usuń</button>
+                  <button onClick={() => {projectService.setActiveProject(project.id);setActiveProject(project);}}>Wybierz projekt</button>
                 </div>
               </div>
             ))}
