@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Project } from "./models/Project";
 import { projectService } from "./services/projectService";
 import{ generateId } from "./utils/generateID";
+import { userService } from "./services/userServices";
 
 type FormData = {
   name: string;
@@ -17,6 +18,7 @@ function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [formData, setFormData] = useState<FormData>(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const user = userService.getCurrentUser();
 
   function loadProjects() {
     const data = projectService.getAll();
@@ -97,8 +99,8 @@ function App() {
 
   return (
     <div style={{ maxWidth: "900px", margin: "0 auto", padding: "24px" }}>
-      <h1>ManageMe</h1>
-      <p>Prosty CRUD projektów zapisanych w localStorage</p>
+      <h1>ProjectMenager</h1>
+      <h2>Zalogowany użytkownik: {user.firstName} {user.lastName}</h2>
 
       <form
         onSubmit={handleSubmit}
